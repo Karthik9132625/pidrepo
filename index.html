@@ -26,6 +26,8 @@
     <label>Current (A): <input id="current" type="number" step="any" required></label>
     <label>Resistance (Ω): <input id="resistance" type="number" step="any" required></label>
     <label>Set Temperature (°C): <input id="temp" type="number" step="any" required></label>
+    <label>Ultimate Gain (Ku): <input type="number" step="any" name="ku" required></label>
+    <label>Oscillation Period (Pu): <input type="number" step="any" name="pu" required></label>
     <button type="submit">Calculate PID</button>
   </form>
 
@@ -44,6 +46,8 @@
       current: parseFloat(form.current.value),
       resistance: parseFloat(form.resistance.value),
       temp: parseFloat(form.temp.value),
+      ku: parseFloat(form.ku.value),
+      pu: parseFloat(form.pu.value),
     };
 
     try {
