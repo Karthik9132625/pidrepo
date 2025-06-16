@@ -12,13 +12,48 @@
 </head>
 <body>
   <h2>Heater PID Tuner (Ziegler-Nichols)</h2>
-  <form>
-    <label>Power (kW): <input type="number" required></label>
-    <label>Voltage (V): <input type="number" required></label>
-    <label>Current (A): <input type="number" required></label>
-    <label>Resistance (Ω): <input type="number" required></label>
-    <label>Set Temperature (°C): <input type="number" required></label>
-    <button type="submit">Calculate (Coming Soon)</button>
+  <form id="pidForm">
+    <label>Power (kW): <input id="power" type="number" required></label>
+    <label>Voltage (V): <input id="voltage" type="number" required></label>
+    <label>Current (A): <input id="current" type="number" required></label>
+    <label>Resistance (Ω): <input id="resistance" type="number" required></label>
+    <label>Set Temperature (°C): <input id="temp" type="number" required></label>
+    <button type="submit">Calculate PID</button>
   </form>
+
+  <div id="result"></div>
+
+  <script>
+    const backendURL = "https://pid-backend.onrender.com"; // Replace with your actual backend URL
+
+    document.getElementById("pidForm").addEventListener("submit", async function (e) {
+      e.preventDefault();
+
+      const data = {
+        power: parseFloat(document.getElementById("power").value),
+        voltage: parseFloat(document.getElementById("voltage").value),
+        current: parseFloat(document.getElementById("current").value),
+        resistance: parseFloat(document.getElementById("resistance").value),
+        temp: parseFloat(document.getElementById("temp").value),
+      };
+
+      const res = await fetch(`${backendURL}/calculate`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+      const result = await res.json();
+
+      document.getElementById("result").innerHTML = `
+        <div style="margin-top: 20px;">
+          <h3>PID Output:</h3>
+          Kp: ${result.Kp} <br>
+          Ki: ${result.Ki} <br>
+          Kd: ${result.Kd}
+        </div>
+      `;
+    });
+  </script>
 </body>
 </html>
