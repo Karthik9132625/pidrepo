@@ -13,11 +13,11 @@
 <body>
   <h2>Heater PID Tuner (Ziegler-Nichols)</h2>
   <form id="pidForm">
-    <label>Power (kW): <input id="power" type="number" required></label>
-    <label>Voltage (V): <input id="voltage" type="number" required></label>
-    <label>Current (A): <input id="current" type="number" required></label>
-    <label>Resistance (Ω): <input id="resistance" type="number" required></label>
-    <label>Set Temperature (°C): <input id="temp" type="number" required></label>
+    <label>Power (kW): <input id="power" type="number" step="any" required></label>
+<label>Voltage (V): <input id="voltage" type="number" step="any" required></label>
+<label>Current (A): <input id="current" type="number" step="any" required></label>
+<label>Resistance (Ω): <input id="resistance" type="number" step="any" required></label>
+<label>Set Temperature (°C): <input id="temp" type="number" step="any" required></label>
     <button type="submit">Calculate PID</button>
   </form>
 
