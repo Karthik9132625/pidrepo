@@ -8,16 +8,24 @@
     input { margin: 5px 0; padding: 5px; width: 200px; }
     label { display: block; margin-top: 10px; }
     button { margin-top: 20px; padding: 10px 20px; }
+    #result {
+      margin-top: 30px;
+      background-color: #f9f9f9;
+      padding: 15px;
+      border-radius: 8px;
+      font-size: 16px;
+      color: #333;
+    }
   </style>
 </head>
 <body>
   <h2>Heater PID Tuner (Ziegler-Nichols)</h2>
   <form id="pidForm">
     <label>Power (kW): <input id="power" type="number" step="any" required></label>
-<label>Voltage (V): <input id="voltage" type="number" step="any" required></label>
-<label>Current (A): <input id="current" type="number" step="any" required></label>
-<label>Resistance (Ω): <input id="resistance" type="number" step="any" required></label>
-<label>Set Temperature (°C): <input id="temp" type="number" step="any" required></label>
+    <label>Voltage (V): <input id="voltage" type="number" step="any" required></label>
+    <label>Current (A): <input id="current" type="number" step="any" required></label>
+    <label>Resistance (Ω): <input id="resistance" type="number" step="any" required></label>
+    <label>Set Temperature (°C): <input id="temp" type="number" step="any" required></label>
     <button type="submit">Calculate PID</button>
   </form>
 
@@ -37,22 +45,28 @@
         temp: parseFloat(document.getElementById("temp").value),
       };
 
-      const res = await fetch(`${backendURL}/calculate`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
+      try {
+        const res = await fetch(`${backendURL}/calculate`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        });
 
-      const result = await res.json();
+        if (!res.ok) {
+          throw new Error("Backend error");
+        }
 
-      document.getElementById("result").innerHTML = `
-        <div style="margin-top: 20px;">
-          <h3>PID Output:</h3>
-          Kp: ${result.Kp} <br>
-          Ki: ${result.Ki} <br>
-          Kd: ${result.Kd}
-        </div>
-      `;
+        const result = await res.json();
+
+        document.getElementById("result").innerHTML = `
+          <strong>PID Output:</strong><br>
+          <b>Kp:</b> ${result.Kp.toFixed(2)}<br>
+          <b>Ki:</b> ${result.Ki.toFixed(2)}<br>
+          <b>Kd:</b> ${result.Kd.toFixed(2)}
+        `;
+      } catch (error) {
+        document.getElementById("result").innerHTML = `<span style="color:red;">Failed to get PID values. Please check backend connection.</span>`;
+      }
     });
   </script>
 </body>
